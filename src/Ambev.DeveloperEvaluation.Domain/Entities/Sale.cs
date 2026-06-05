@@ -50,6 +50,16 @@ public class Sale : BaseEntity
         TotalAmount = 0;
     }
 
+    public void ReplaceItems(IEnumerable<SaleItem> newItems)
+    {
+        if (IsCancelled)
+            throw new InvalidOperationException("Cannot modify a cancelled sale.");
+
+        _items.Clear();
+        foreach (var item in newItems)
+            AddItem(item);
+    }
+
     public void CancelItem(Guid itemId)
     {
         if (IsCancelled)
