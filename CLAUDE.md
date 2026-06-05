@@ -89,16 +89,17 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | SALE-1 — Domain Entities |
-| **Last Completed Step** | **[SALE-1.4](.doc/steps/SALE-1.4.md)** — Domain Events created |
-| **Next Step** | **[SALE-2.1](.doc/steps/SALE-2.1.md)** — `CreateSaleHandler` |
-| **Tests Status** | — |
+| **Current Module** | SALE-2 — Unit Tests |
+| **Last Completed Step** | **[SALE-2.1](.doc/steps/SALE-2.1.md)** — Sale entity unit tests (Red) |
+| **Next Step** | **[SALE-2.2](.doc/steps/SALE-2.2.md)** — Application handler unit tests |
+| **Tests Status** | Red (compile only — .NET 8 runtime not available locally) |
 
 ### Completed Steps
 - [x] SALE-1.1 — `Sale.cs` and `SaleItem.cs` (`feat(domain): add Sale and SaleItem entities`)
 - [x] SALE-1.2 — `ISaleRepository` (`feat(domain): add ISaleRepository interface`)
 - [x] SALE-1.3 — `SaleValidator` (`feat(domain): add SaleValidator`)
 - [x] SALE-1.4 — Domain Events (`feat(domain): add Sale domain events`)
+- [x] SALE-2.1 — Sale entity unit tests (`test(domain): add Sale entity unit tests`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
