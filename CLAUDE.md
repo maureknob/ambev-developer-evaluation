@@ -90,9 +90,9 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 | Field | Value |
 |-------|-------|
 | **Current Module** | SALE-3 — Application Layer |
-| **Last Completed Step** | **[SALE-3.3](.doc/steps/SALE-3.3.md)** — `UpdateSale` command and handler |
-| **Next Step** | **[SALE-3.4](.doc/steps/SALE-3.4.md)** — `DeleteSale` command and handler |
-| **Tests Status** | Red — A01–A09, A20, A21 target implemented; remaining handler tests still pending Application layer |
+| **Last Completed Step** | **[SALE-3.4](.doc/steps/SALE-3.4.md)** — `DeleteSale` command and handler |
+| **Next Step** | **[SALE-3.5](.doc/steps/SALE-3.5.md)** — `CancelSale` and `CancelSaleItem` commands and handlers |
+| **Tests Status** | Red — A01–A11, A20, A21 target implemented; remaining handler tests still pending Application layer |
 
 ### Completed Steps
 - [x] SALE-1.1 — `Sale.cs` and `SaleItem.cs` (`feat(domain): add Sale and SaleItem entities`)
@@ -107,6 +107,7 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-3.1 — CreateSale command and handler (`feat(application): add CreateSale command and handler`)
 - [x] SALE-3.2 — GetSale and GetSales queries (`feat(application): add GetSale and GetSales queries`)
 - [x] SALE-3.3 — UpdateSale command and handler (`feat(application): add UpdateSale command and handler`)
+- [x] SALE-3.4 — DeleteSale command and handler (`feat(application): add DeleteSale command and handler`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
