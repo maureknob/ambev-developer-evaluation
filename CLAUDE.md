@@ -89,10 +89,10 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | SALE-2 — Unit Tests |
-| **Last Completed Step** | **[SALE-2.5](.doc/steps/SALE-2.5.md)** — DeleteSale and GetSale handler tests (Red) |
-| **Next Step** | **[SALE-3.1](.doc/steps/SALE-3.1.md)** — `CreateSale` command and handler |
-| **Tests Status** | Red — handler tests reference Application layer not yet implemented |
+| **Current Module** | SALE-3 — Application Layer |
+| **Last Completed Step** | **[SALE-3.1](.doc/steps/SALE-3.1.md)** — `CreateSale` command and handler |
+| **Next Step** | **[SALE-3.2](.doc/steps/SALE-3.2.md)** — `GetSale` and `GetSales` queries |
+| **Tests Status** | Red — A01–A05 target implemented; remaining handler tests still pending Application layer |
 
 ### Completed Steps
 - [x] SALE-1.1 — `Sale.cs` and `SaleItem.cs` (`feat(domain): add Sale and SaleItem entities`)
@@ -104,8 +104,10 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-2.3 — UpdateSaleHandler tests (`test(application): add UpdateSaleHandler unit tests`)
 - [x] SALE-2.4 — CancelSale/CancelSaleItem handler tests (`test(application): add CancelSale and CancelSaleItem handler unit tests`)
 - [x] SALE-2.5 — DeleteSale/GetSale handler tests (`test(application): add DeleteSale and GetSale handler unit tests`)
+- [x] SALE-3.1 — CreateSale command and handler (`feat(application): add CreateSale command and handler`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
-- [x] SALE-2 — Unit Tests (Red — pending Application Layer)
+- [x] SALE-2 — Unit Tests (Red — pending remaining Application Layer steps)
+- [ ] SALE-3 — Application Layer (in progress)
 
