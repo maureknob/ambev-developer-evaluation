@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Unit.Application.Sales.TestData;
 using AutoMapper;
@@ -33,8 +34,8 @@ public class UpdateSaleHandlerTests
         var result = new UpdateSaleResult { Id = sale.Id };
 
         _saleRepository.GetByIdAsync(sale.Id, Arg.Any<CancellationToken>()).Returns(sale);
-        _saleRepository.GetByNumberAsync(command.SaleNumber, Arg.Any<CancellationToken>()).Returns((Domain.Entities.Sale?)null);
-        _saleRepository.UpdateAsync(Arg.Any<Domain.Entities.Sale>(), Arg.Any<CancellationToken>()).Returns(sale);
+        _saleRepository.GetByNumberAsync(command.SaleNumber, Arg.Any<CancellationToken>()).Returns((Sale?)null);
+        _saleRepository.UpdateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>()).Returns(sale);
         _mapper.Map<UpdateSaleResult>(sale).Returns(result);
 
         // When
@@ -43,7 +44,7 @@ public class UpdateSaleHandlerTests
         // Then
         response.Should().NotBeNull();
         response.Id.Should().Be(sale.Id);
-        await _saleRepository.Received(1).UpdateAsync(Arg.Any<Domain.Entities.Sale>(), Arg.Any<CancellationToken>());
+        await _saleRepository.Received(1).UpdateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>());
     }
 
     [Fact(DisplayName = "A07 — Sale not found throws KeyNotFoundException")]
@@ -51,7 +52,7 @@ public class UpdateSaleHandlerTests
     {
         // Given
         var command = UpdateSaleHandlerTestData.GenerateValidCommand();
-        _saleRepository.GetByIdAsync(command.Id, Arg.Any<CancellationToken>()).Returns((Domain.Entities.Sale?)null);
+        _saleRepository.GetByIdAsync(command.Id, Arg.Any<CancellationToken>()).Returns((Sale?)null);
 
         // When
         var act = () => _handler.Handle(command, CancellationToken.None);
@@ -83,8 +84,8 @@ public class UpdateSaleHandlerTests
         var command = UpdateSaleHandlerTestData.GenerateValidCommand(sale.Id);
 
         _saleRepository.GetByIdAsync(sale.Id, Arg.Any<CancellationToken>()).Returns(sale);
-        _saleRepository.GetByNumberAsync(command.SaleNumber, Arg.Any<CancellationToken>()).Returns((Domain.Entities.Sale?)null);
-        _saleRepository.UpdateAsync(Arg.Any<Domain.Entities.Sale>(), Arg.Any<CancellationToken>()).Returns(sale);
+        _saleRepository.GetByNumberAsync(command.SaleNumber, Arg.Any<CancellationToken>()).Returns((Sale?)null);
+        _saleRepository.UpdateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>()).Returns(sale);
         _mapper.Map<UpdateSaleResult>(sale).Returns(new UpdateSaleResult());
 
         // When
