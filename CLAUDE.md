@@ -89,13 +89,17 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | — |
-| **Last Completed Step** | — (not started) |
-| **Next Step** | **[SALE-1.1](.doc/steps/SALE-1.1.md)** — Create `Sale.cs` and `SaleItem.cs` on branch `feature/SALE-1-domain-entities` |
+| **Current Module** | SALE-1 — Domain Entities |
+| **Last Completed Step** | **[SALE-1.4](.doc/steps/SALE-1.4.md)** — Domain Events created |
+| **Next Step** | **[SALE-2.1](.doc/steps/SALE-2.1.md)** — `CreateSaleHandler` |
 | **Tests Status** | — |
 
 ### Completed Steps
-_None yet._
+- [x] SALE-1.1 — `Sale.cs` and `SaleItem.cs` (`feat(domain): add Sale and SaleItem entities`)
+- [x] SALE-1.2 — `ISaleRepository` (`feat(domain): add ISaleRepository interface`)
+- [x] SALE-1.3 — `SaleValidator` (`feat(domain): add SaleValidator`)
+- [x] SALE-1.4 — Domain Events (`feat(domain): add Sale domain events`)
 
 ### Completed Modules
-_None yet._
+- [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
+
