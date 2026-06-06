@@ -90,8 +90,8 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 | Field | Value |
 |-------|-------|
 | **Current Module** | SALE-4 — ORM & Persistence |
-| **Last Completed Step** | **[SALE-4.1](.doc/steps/SALE-4.1.md)** — `SaleConfiguration` EF Core mapping |
-| **Next Step** | **[SALE-4.2](.doc/steps/SALE-4.2.md)** — `SaleRepository` implementation |
+| **Last Completed Step** | **[SALE-4.2](.doc/steps/SALE-4.2.md)** — `SaleRepository` implementation |
+| **Next Step** | **[SALE-4.3](.doc/steps/SALE-4.3.md)** — Add `DbSet<Sale>` to `DefaultContext` |
 | **Tests Status** | Green — all A01–A21 handler targets implemented |
 
 ### Completed Steps
@@ -112,6 +112,7 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 ### Completed Steps (continued)
 - [x] SALE-4.1 — `SaleConfiguration` EF Core mapping (`feat(orm): add EF Core mapping for Sale and SaleItem`)
+- [x] SALE-4.2 — `SaleRepository` implementation (`feat(orm): add SaleRepository`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
