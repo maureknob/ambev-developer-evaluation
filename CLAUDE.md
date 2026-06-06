@@ -90,8 +90,8 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 | Field | Value |
 |-------|-------|
 | **Current Module** | SALE-5 — API Endpoints |
-| **Last Completed Step** | **[SALE-5.2](.doc/steps/SALE-5.2.md)** — UpdateSale, DeleteSale, CancelSale, CancelSaleItem request/response models |
-| **Next Step** | **[SALE-5.3](.doc/steps/SALE-5.3.md)** — `SalesController` with all 7 endpoints |
+| **Last Completed Step** | **[SALE-5.3](.doc/steps/SALE-5.3.md)** — `SalesController` with all 7 endpoints |
+| **Next Step** | **[SALE-5.4](.doc/steps/SALE-5.4.md)** — DI registration for Sales services |
 | **Tests Status** | Green — all A01–A21 handler targets implemented |
 
 ### Completed Steps
@@ -117,6 +117,7 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-4.4 — EF Core migration `AddSalesTables` (`chore(orm): add EF Core migration for Sales and SaleItems tables`)
 - [x] SALE-5.1 — CreateSale, GetSale, GetSales request/response models and profiles (`feat(api): add CreateSale, GetSale, and GetSales request and response models`)
 - [x] SALE-5.2 — UpdateSale, DeleteSale, CancelSale, CancelSaleItem request/response models (`feat(api): add UpdateSale, DeleteSale, CancelSale, and CancelSaleItem request and response models`)
+- [x] SALE-5.3 — `SalesController` with all 7 endpoints (`feat(api): add SalesController`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
