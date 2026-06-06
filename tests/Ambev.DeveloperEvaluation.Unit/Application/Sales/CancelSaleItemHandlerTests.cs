@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Sales.CancelSaleItem;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Unit.Application.Sales.TestData;
 using AutoMapper;
@@ -32,14 +33,14 @@ public class CancelSaleItemHandlerTests
         var command = new CancelSaleItemCommand { SaleId = sale.Id, ItemId = itemId };
 
         _saleRepository.GetByIdAsync(sale.Id, Arg.Any<CancellationToken>()).Returns(sale);
-        _saleRepository.UpdateAsync(Arg.Any<Domain.Entities.Sale>(), Arg.Any<CancellationToken>()).Returns(sale);
+        _saleRepository.UpdateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>()).Returns(sale);
         _mapper.Map<CancelSaleItemResult>(sale).Returns(new CancelSaleItemResult());
 
         // When
         await _handler.Handle(command, CancellationToken.None);
 
         // Then
-        await _saleRepository.Received(1).UpdateAsync(Arg.Any<Domain.Entities.Sale>(), Arg.Any<CancellationToken>());
+        await _saleRepository.Received(1).UpdateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>());
         _logger.Received(1).Log(LogLevel.Information, Arg.Any<EventId>(), Arg.Any<object>(), Arg.Any<Exception?>(), Arg.Any<Func<object, Exception?, string>>());
     }
 
@@ -48,7 +49,7 @@ public class CancelSaleItemHandlerTests
     {
         // Given
         var command = new CancelSaleItemCommand { SaleId = Guid.NewGuid(), ItemId = Guid.NewGuid() };
-        _saleRepository.GetByIdAsync(command.SaleId, Arg.Any<CancellationToken>()).Returns((Domain.Entities.Sale?)null);
+        _saleRepository.GetByIdAsync(command.SaleId, Arg.Any<CancellationToken>()).Returns((Sale?)null);
 
         // When
         var act = () => _handler.Handle(command, CancellationToken.None);
