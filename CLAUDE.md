@@ -89,9 +89,9 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | SALE-4 — ORM & Persistence |
-| **Last Completed Step** | **[SALE-4.4](.doc/steps/SALE-4.4.md)** — EF Core migration for Sales and SaleItems tables |
-| **Next Step** | **[SALE-5.1](.doc/steps/SALE-5.1.md)** — API request/response models for CreateSale, GetSale, GetSales |
+| **Current Module** | SALE-5 — API Endpoints |
+| **Last Completed Step** | **[SALE-5.1](.doc/steps/SALE-5.1.md)** — CreateSale, GetSale, GetSales request/response models |
+| **Next Step** | **[SALE-5.2](.doc/steps/SALE-5.2.md)** — UpdateSale, DeleteSale, CancelSale, CancelSaleItem request/response models |
 | **Tests Status** | Green — all A01–A21 handler targets implemented |
 
 ### Completed Steps
@@ -115,11 +115,12 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-4.2 — `SaleRepository` implementation (`feat(orm): add SaleRepository`)
 - [x] SALE-4.3 — `DbSet<Sale>` registered in `DefaultContext` (`chore(orm): register Sale DbSet and configuration in DefaultContext`)
 - [x] SALE-4.4 — EF Core migration `AddSalesTables` (`chore(orm): add EF Core migration for Sales and SaleItems tables`)
+- [x] SALE-5.1 — CreateSale, GetSale, GetSales request/response models and profiles (`feat(api): add CreateSale, GetSale, and GetSales request and response models`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
 - [x] SALE-2 — Unit Tests
 - [x] SALE-3 — Application Layer (all handlers implemented)
 - [x] SALE-4 — ORM & Persistence (all steps complete)
-- [ ] SALE-5 — API Endpoints (next)
+- [ ] SALE-5 — API Endpoints (in progress)
 
