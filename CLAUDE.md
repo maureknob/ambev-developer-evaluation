@@ -89,13 +89,57 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | — |
-| **Last Completed Step** | — (not started) |
-| **Next Step** | **[SALE-1.1](.doc/steps/SALE-1.1.md)** — Create `Sale.cs` and `SaleItem.cs` on branch `feature/SALE-1-domain-entities` |
-| **Tests Status** | — |
+| **Current Module** | SALE-9 — Startup Migrations & Infrastructure Seeding |
+| **Last Completed Step** | **[SALE-9.1](.doc/steps/SALE-9.1.md)** — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check |
+| **Next Step** | — all steps complete — |
+| **Tests Status** | Green — all A01–A21 handler targets implemented (89/89) |
 
 ### Completed Steps
-_None yet._
+- [x] SALE-1.1 — `Sale.cs` and `SaleItem.cs` (`feat(domain): add Sale and SaleItem entities`)
+- [x] SALE-1.2 — `ISaleRepository` (`feat(domain): add ISaleRepository interface`)
+- [x] SALE-1.3 — `SaleValidator` (`feat(domain): add SaleValidator`)
+- [x] SALE-1.4 — Domain Events (`feat(domain): add Sale domain events`)
+- [x] SALE-2.1 — Sale entity unit tests (`test(domain): add Sale entity unit tests`)
+- [x] SALE-2.2 — CreateSaleHandler tests (`test(application): add CreateSaleHandler unit tests`)
+- [x] SALE-2.3 — UpdateSaleHandler tests (`test(application): add UpdateSaleHandler unit tests`)
+- [x] SALE-2.4 — CancelSale/CancelSaleItem handler tests (`test(application): add CancelSale and CancelSaleItem handler unit tests`)
+- [x] SALE-2.5 — DeleteSale/GetSale handler tests (`test(application): add DeleteSale and GetSale handler unit tests`)
+- [x] SALE-3.1 — CreateSale command and handler (`feat(application): add CreateSale command and handler`)
+- [x] SALE-3.2 — GetSale and GetSales queries (`feat(application): add GetSale and GetSales queries`)
+- [x] SALE-3.3 — UpdateSale command and handler (`feat(application): add UpdateSale command and handler`)
+- [x] SALE-3.4 — DeleteSale command and handler (`feat(application): add DeleteSale command and handler`)
+- [x] SALE-3.5 — CancelSale and CancelSaleItem commands and handlers (`feat(application): add CancelSale and CancelSaleItem commands and handlers`)
+- [x] SALE-4.1 — `SaleConfiguration` EF Core mapping (`feat(orm): add EF Core mapping for Sale and SaleItem`)
+- [x] SALE-4.2 — `SaleRepository` implementation (`feat(orm): add SaleRepository`)
+- [x] SALE-4.3 — `DbSet<Sale>` registered in `DefaultContext` (`chore(orm): register Sale DbSet and configuration in DefaultContext`)
+- [x] SALE-4.4 — EF Core migration `AddSalesTables` (`chore(orm): add EF Core migration for Sales and SaleItems tables`)
+- [x] SALE-5.1 — CreateSale, GetSale, GetSales request/response models and profiles (`feat(api): add CreateSale, GetSale, and GetSales request and response models`)
+- [x] SALE-5.2 — UpdateSale, DeleteSale, CancelSale, CancelSaleItem request/response models (`feat(api): add UpdateSale, DeleteSale, CancelSale, and CancelSaleItem request and response models`)
+- [x] SALE-5.3 — `SalesController` with all 7 endpoints (`feat(api): add SalesController`)
+- [x] SALE-5.4 — `ISaleRepository` registered in DI (`feat(ioc): register Sales services in DI container`)
+- [x] SALE-6.1 — `SaleDocument`, `SaleItemDocument`, `IMongoSaleRepository` (`feat(domain): add SaleDocument and IMongoSaleRepository for read-side`)
+- [x] SALE-6.2 — `MongoSaleRepository` implementation (`feat(nosql): add MongoSaleRepository implementation`)
+- [x] SALE-6.3 — Wire MongoDB into `GetSaleHandler`, `GetSalesHandler`, and write handlers (`feat(application): wire MongoDB read-side into GetSale and GetSales handlers`)
+- [x] SALE-6.4 — DI registration for MongoDB (`feat(ioc): register MongoDB client and MongoSaleRepository in DI`)
+
+### Pending Steps
+- [x] SALE-7.1 — `ISaleCacheService` and `RedisSaleCacheService`
+- [x] SALE-7.2 — Wire Redis cache-aside into `GetSaleHandler` and write-side invalidation
+- [x] SALE-7.3 — DI registration for Redis
+- [x] SALE-8.1 — Publish domain events via Rebus in all write handlers
+- [x] SALE-8.2 — DI registration for Rebus (in-memory transport)
+- [x] SALE-9.1 — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check
 
 ### Completed Modules
-_None yet._
+- [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
+- [x] SALE-2 — Unit Tests
+- [x] SALE-3 — Application Layer (all handlers implemented)
+- [x] SALE-4 — ORM & Persistence (all steps complete)
+- [x] SALE-5 — API Endpoints (all steps complete)
+- [x] SALE-6 — MongoDB Read Model (all steps complete)
+
+### Pending Modules
+- [x] SALE-7 — Redis Cache
+- [x] SALE-8 — Rebus Domain Event Publishing
+- [x] SALE-9 — Startup Migrations & Infrastructure Seeding
+
