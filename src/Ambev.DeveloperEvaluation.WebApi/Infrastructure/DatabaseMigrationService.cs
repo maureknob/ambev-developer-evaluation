@@ -1,3 +1,6 @@
+using Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.ORM;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +25,7 @@ public class DatabaseMigrationService : IHostedService
         using var scope = _services.CreateScope();
 
         await ApplyPostgresAsync(scope, cancellationToken);
+        await SeedUsersAsync(scope, cancellationToken);
         await EnsureMongoIndexesAsync(scope, cancellationToken);
         await CheckRedisAsync(scope, cancellationToken);
     }
@@ -39,6 +43,41 @@ public class DatabaseMigrationService : IHostedService
         {
             _logger.LogError(ex, "Failed to apply EF Core migrations.");
             throw;
+        }
+    }
+
+    private async Task SeedUsersAsync(IServiceScope scope, CancellationToken ct)
+    {
+        try
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DefaultContext>();
+            var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+
+            const string testEmail = "test@ambev.com";
+
+            var exists = await db.Users.AnyAsync(u => u.Email == testEmail, ct);
+            if (exists)
+            {
+                _logger.LogInformation("Test user already exists — skipping seed.");
+                return;
+            }
+
+            db.Users.Add(new User
+            {
+                Username = "Test User",
+                Email = testEmail,
+                Phone = "(11) 99999-9999",
+                Password = hasher.HashPassword("Test@1234"),
+                Role = UserRole.Admin,
+                Status = UserStatus.Active
+            });
+
+            await db.SaveChangesAsync(ct);
+            _logger.LogInformation("Test user seeded (email: {Email}, password: Test@1234).", testEmail);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not seed test user — continuing startup.");
         }
     }
 
