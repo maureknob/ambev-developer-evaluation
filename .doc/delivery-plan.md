@@ -147,12 +147,62 @@ git checkout -b feature/SALE-1-domain-entities
 
 ---
 
+### Module 6 — MongoDB Read Model
+**Branch:** `feature/SALE-6-mongo-readmodel`
+
+| Step | Files |
+|------|-------|
+| [6.1](.doc/steps/SALE-6.1.md) | `Domain/Repositories/IMongoSaleRepository.cs`<br>`NoSQL/Documents/SaleDocument.cs`<br>`NoSQL/Documents/SaleItemDocument.cs` |
+| [6.2](.doc/steps/SALE-6.2.md) | `NoSQL/Repositories/MongoSaleRepository.cs` |
+| [6.3](.doc/steps/SALE-6.3.md) | Update `GetSaleHandler`, `GetSalesHandler`, and all write handlers |
+| [6.4](.doc/steps/SALE-6.4.md) | DI registration + `appsettings.json` MongoDB config |
+
+**→ PR: `[SALE-6] MongoDB Read Model` — `feature/SALE-6-mongo-readmodel` → `dev`**
+
+---
+
+### Module 7 — Redis Cache
+**Branch:** `feature/SALE-7-redis-cache`
+
+| Step | Files |
+|------|-------|
+| [7.1](.doc/steps/SALE-7.1.md) | `Common/Cache/ISaleCacheService.cs`<br>`Common/Cache/RedisSaleCacheService.cs` |
+| [7.2](.doc/steps/SALE-7.2.md) | Wire cache-aside into `GetSaleHandler`; invalidate on writes |
+| [7.3](.doc/steps/SALE-7.3.md) | DI registration + `appsettings.json` Redis config |
+
+**→ PR: `[SALE-7] Redis Cache` — `feature/SALE-7-redis-cache` → `dev`**
+
+---
+
+### Module 8 — Rebus Domain Event Publishing
+**Branch:** `feature/SALE-8-rebus-events`
+
+| Step | Files |
+|------|-------|
+| [8.1](.doc/steps/SALE-8.1.md) | Update all four write handlers to publish via `IBus` |
+| [8.2](.doc/steps/SALE-8.2.md) | DI registration (in-memory transport) |
+
+**→ PR: `[SALE-8] Rebus Event Publishing` — `feature/SALE-8-rebus-events` → `dev`**
+
+---
+
+### Module 9 — Startup Migrations & Infrastructure Seeding
+**Branch:** `feature/SALE-9-startup-migrations`
+
+| Step | Files |
+|------|-------|
+| [9.1](.doc/steps/SALE-9.1.md) | `WebApi/Infrastructure/DatabaseMigrationService.cs` — auto-applies EF Core migrations, creates MongoDB indexes, verifies Redis on startup |
+
+**→ PR: `[SALE-9] Startup Migrations` — `feature/SALE-9-startup-migrations` → `dev`**
+
+---
+
 ### Final Release
 
 | Step | Action |
 |------|--------|
-| 6.1 | **PR: `dev` → `main`** — full review of all changes |
-| 6.2 | Merge and tag `v1.0.0` |
+| 10.1 | **PR: `dev` → `main`** — full review of all changes |
+| 10.2 | Merge and tag `v1.0.0` |
 
 ---
 
@@ -182,8 +232,11 @@ This project uses **Semantic Commits**:
 | `domain` | Domain entities, events, validators, interfaces |
 | `application` | MediatR commands, handlers, profiles |
 | `orm` | EF Core mappings, repositories, migrations |
+| `nosql` | MongoDB documents and repositories |
+| `cache` | Redis cache service |
 | `api` | Controllers, request/response models |
 | `ioc` | Dependency injection |
+| `startup` | Hosted services, migration runners |
 | `test` | Unit test projects |
 
 ### Examples
@@ -216,6 +269,10 @@ A module is **done** when:
 - [ ] `dev` branch compiles cleanly after merge
 
 The project is **done** when:
-- [ ] All 5 modules are merged into `dev`
+- [ ] All 9 modules are merged into `dev`
 - [ ] All 35 test scenarios from the spec pass
+- [ ] MongoDB read-side is wired and serving `GetSale` / `GetSales`
+- [ ] Redis cache-aside is active for `GetSale`
+- [ ] Rebus publishes all four domain events (in-memory transport)
+- [ ] `docker compose up` brings the API to a working state with no manual steps
 - [ ] Final PR `dev` → `main` is merged and tagged `v1.0.0`
