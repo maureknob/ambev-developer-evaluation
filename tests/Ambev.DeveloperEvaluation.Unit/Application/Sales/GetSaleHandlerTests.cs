@@ -1,8 +1,10 @@
+using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 
@@ -11,14 +13,18 @@ namespace Ambev.DeveloperEvaluation.Unit.Application.Sales;
 public class GetSaleHandlerTests
 {
     private readonly IMongoSaleRepository _mongoRepo;
+    private readonly ISaleCacheService _cache;
     private readonly IMapper _mapper;
+    private readonly ILogger<GetSaleHandler> _logger;
     private readonly GetSaleHandler _handler;
 
     public GetSaleHandlerTests()
     {
         _mongoRepo = Substitute.For<IMongoSaleRepository>();
+        _cache = Substitute.For<ISaleCacheService>();
         _mapper = Substitute.For<IMapper>();
-        _handler = new GetSaleHandler(_mongoRepo, _mapper);
+        _logger = Substitute.For<ILogger<GetSaleHandler>>();
+        _handler = new GetSaleHandler(_mongoRepo, _cache, _mapper, _logger);
     }
 
     [Fact(DisplayName = "A20 — Valid Id returns full GetSaleResult")]

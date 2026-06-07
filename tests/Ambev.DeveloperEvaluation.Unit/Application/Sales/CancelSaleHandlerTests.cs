@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Application.Sales.CancelSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
@@ -14,6 +15,7 @@ public class CancelSaleHandlerTests
 {
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
+    private readonly ISaleCacheService _cache;
     private readonly IMapper _mapper;
     private readonly ILogger<CancelSaleHandler> _logger;
     private readonly CancelSaleHandler _handler;
@@ -22,9 +24,10 @@ public class CancelSaleHandlerTests
     {
         _saleRepository = Substitute.For<ISaleRepository>();
         _mongoRepo = Substitute.For<IMongoSaleRepository>();
+        _cache = Substitute.For<ISaleCacheService>();
         _mapper = Substitute.For<IMapper>();
         _logger = Substitute.For<ILogger<CancelSaleHandler>>();
-        _handler = new CancelSaleHandler(_saleRepository, _mongoRepo, _mapper, _logger);
+        _handler = new CancelSaleHandler(_saleRepository, _mongoRepo, _cache, _mapper, _logger);
     }
 
     [Fact(DisplayName = "A12 — Valid cancellation sets IsCancelled and logs SaleCancelledEvent")]

@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
@@ -11,17 +12,20 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand, CancelSaleRe
 {
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
+    private readonly ISaleCacheService _cache;
     private readonly IMapper _mapper;
     private readonly ILogger<CancelSaleHandler> _logger;
 
     public CancelSaleHandler(
         ISaleRepository saleRepository,
         IMongoSaleRepository mongoRepo,
+        ISaleCacheService cache,
         IMapper mapper,
         ILogger<CancelSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mongoRepo = mongoRepo;
+        _cache = cache;
         _mapper = mapper;
         _logger = logger;
     }
@@ -36,7 +40,17 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand, CancelSaleRe
 
         var updated = await _saleRepository.UpdateAsync(sale, cancellationToken);
 
-        await _mongoRepo.UpsertAsync(_mapper.Map<SaleDocument>(updated), cancellationToken);
+        var saleDocument = _mapper.Map<SaleDocument>(updated);
+        await _mongoRepo.UpsertAsync(saleDocument, cancellationToken);
+
+        try
+        {
+            await _cache.SetAsync(saleDocument, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis unavailable; could not populate cache for sale {SaleId}.", updated.Id);
+        }
 
         _logger.LogInformation("SaleCancelledEvent: {@Event}", new SaleCancelledEvent
         {

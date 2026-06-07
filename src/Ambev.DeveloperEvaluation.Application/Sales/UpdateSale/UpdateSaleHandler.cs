@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.ReadModel;
@@ -13,17 +14,20 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
 {
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
+    private readonly ISaleCacheService _cache;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateSaleHandler> _logger;
 
     public UpdateSaleHandler(
         ISaleRepository saleRepository,
         IMongoSaleRepository mongoRepo,
+        ISaleCacheService cache,
         IMapper mapper,
         ILogger<UpdateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mongoRepo = mongoRepo;
+        _cache = cache;
         _mapper = mapper;
         _logger = logger;
     }
@@ -63,7 +67,17 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
 
         var updated = await _saleRepository.UpdateAsync(sale, cancellationToken);
 
-        await _mongoRepo.UpsertAsync(_mapper.Map<SaleDocument>(updated), cancellationToken);
+        var saleDocument = _mapper.Map<SaleDocument>(updated);
+        await _mongoRepo.UpsertAsync(saleDocument, cancellationToken);
+
+        try
+        {
+            await _cache.SetAsync(saleDocument, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis unavailable; could not populate cache for sale {SaleId}.", updated.Id);
+        }
 
         _logger.LogInformation("SaleModifiedEvent: {@Event}", new SaleModifiedEvent
         {
