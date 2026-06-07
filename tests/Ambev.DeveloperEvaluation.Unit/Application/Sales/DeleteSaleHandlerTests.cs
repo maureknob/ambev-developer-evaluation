@@ -9,12 +9,14 @@ namespace Ambev.DeveloperEvaluation.Unit.Application.Sales;
 public class DeleteSaleHandlerTests
 {
     private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly DeleteSaleHandler _handler;
 
     public DeleteSaleHandlerTests()
     {
         _saleRepository = Substitute.For<ISaleRepository>();
-        _handler = new DeleteSaleHandler(_saleRepository);
+        _mongoRepo = Substitute.For<IMongoSaleRepository>();
+        _handler = new DeleteSaleHandler(_saleRepository, _mongoRepo);
     }
 
     [Fact(DisplayName = "A10 — Valid delete returns success response")]

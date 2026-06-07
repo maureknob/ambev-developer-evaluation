@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Events;
+using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
@@ -11,12 +12,18 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleResult>
 {
     private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateSaleHandler> _logger;
 
-    public UpdateSaleHandler(ISaleRepository saleRepository, IMapper mapper, ILogger<UpdateSaleHandler> logger)
+    public UpdateSaleHandler(
+        ISaleRepository saleRepository,
+        IMongoSaleRepository mongoRepo,
+        IMapper mapper,
+        ILogger<UpdateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
+        _mongoRepo = mongoRepo;
         _mapper = mapper;
         _logger = logger;
     }
@@ -55,6 +62,8 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
         sale.UpdatedAt = DateTime.UtcNow;
 
         var updated = await _saleRepository.UpdateAsync(sale, cancellationToken);
+
+        await _mongoRepo.UpsertAsync(_mapper.Map<SaleDocument>(updated), cancellationToken);
 
         _logger.LogInformation("SaleModifiedEvent: {@Event}", new SaleModifiedEvent
         {

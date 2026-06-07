@@ -7,18 +7,18 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSales;
 
 public class GetSalesHandler : IRequestHandler<GetSalesCommand, GetSalesResult>
 {
-    private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly IMapper _mapper;
 
-    public GetSalesHandler(ISaleRepository saleRepository, IMapper mapper)
+    public GetSalesHandler(IMongoSaleRepository mongoRepo, IMapper mapper)
     {
-        _saleRepository = saleRepository;
+        _mongoRepo = mongoRepo;
         _mapper = mapper;
     }
 
     public async Task<GetSalesResult> Handle(GetSalesCommand command, CancellationToken cancellationToken)
     {
-        var (items, totalCount) = await _saleRepository.GetPagedAsync(
+        var (items, totalCount) = await _mongoRepo.GetPagedAsync(
             command.Page, command.Size, command.Order, cancellationToken);
 
         var totalPages = (int)Math.Ceiling(totalCount / (double)command.Size);
@@ -26,7 +26,7 @@ public class GetSalesHandler : IRequestHandler<GetSalesCommand, GetSalesResult>
         return new GetSalesResult
         {
             Data = _mapper.Map<IEnumerable<GetSaleResult>>(items),
-            TotalItems = totalCount,
+            TotalItems = (int)totalCount,
             CurrentPage = command.Page,
             TotalPages = totalPages
         };
