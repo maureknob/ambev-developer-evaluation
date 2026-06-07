@@ -1,6 +1,8 @@
+using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 
@@ -10,13 +12,17 @@ public class DeleteSaleHandlerTests
 {
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
+    private readonly ISaleCacheService _cache;
+    private readonly ILogger<DeleteSaleHandler> _logger;
     private readonly DeleteSaleHandler _handler;
 
     public DeleteSaleHandlerTests()
     {
         _saleRepository = Substitute.For<ISaleRepository>();
         _mongoRepo = Substitute.For<IMongoSaleRepository>();
-        _handler = new DeleteSaleHandler(_saleRepository, _mongoRepo);
+        _cache = Substitute.For<ISaleCacheService>();
+        _logger = Substitute.For<ILogger<DeleteSaleHandler>>();
+        _handler = new DeleteSaleHandler(_saleRepository, _mongoRepo, _cache, _logger);
     }
 
     [Fact(DisplayName = "A10 — Valid delete returns success response")]
