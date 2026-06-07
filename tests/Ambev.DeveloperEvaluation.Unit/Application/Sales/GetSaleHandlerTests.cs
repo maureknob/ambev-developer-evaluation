@@ -1,5 +1,5 @@
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
-using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentAssertions;
@@ -10,34 +10,34 @@ namespace Ambev.DeveloperEvaluation.Unit.Application.Sales;
 
 public class GetSaleHandlerTests
 {
-    private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly IMapper _mapper;
     private readonly GetSaleHandler _handler;
 
     public GetSaleHandlerTests()
     {
-        _saleRepository = Substitute.For<ISaleRepository>();
+        _mongoRepo = Substitute.For<IMongoSaleRepository>();
         _mapper = Substitute.For<IMapper>();
-        _handler = new GetSaleHandler(_saleRepository, _mapper);
+        _handler = new GetSaleHandler(_mongoRepo, _mapper);
     }
 
     [Fact(DisplayName = "A20 — Valid Id returns full GetSaleResult")]
     public async Task Handle_ValidId_ReturnsSaleResult()
     {
         // Given
-        var sale = new Sale { SaleNumber = "SALE-001", CustomerId = Guid.NewGuid() };
-        var command = new GetSaleCommand { Id = sale.Id };
-        var result = new GetSaleResult { Id = sale.Id, SaleNumber = sale.SaleNumber };
+        var document = new SaleDocument { Id = Guid.NewGuid(), SaleNumber = "SALE-001" };
+        var command = new GetSaleCommand { Id = document.Id };
+        var result = new GetSaleResult { Id = document.Id, SaleNumber = document.SaleNumber };
 
-        _saleRepository.GetByIdAsync(sale.Id, Arg.Any<CancellationToken>()).Returns(sale);
-        _mapper.Map<GetSaleResult>(sale).Returns(result);
+        _mongoRepo.GetByIdAsync(document.Id, Arg.Any<CancellationToken>()).Returns(document);
+        _mapper.Map<GetSaleResult>(document).Returns(result);
 
         // When
         var response = await _handler.Handle(command, CancellationToken.None);
 
         // Then
         response.Should().NotBeNull();
-        response.Id.Should().Be(sale.Id);
+        response.Id.Should().Be(document.Id);
         response.SaleNumber.Should().Be("SALE-001");
     }
 
@@ -46,7 +46,7 @@ public class GetSaleHandlerTests
     {
         // Given
         var command = new GetSaleCommand { Id = Guid.NewGuid() };
-        _saleRepository.GetByIdAsync(command.Id, Arg.Any<CancellationToken>()).Returns((Sale?)null);
+        _mongoRepo.GetByIdAsync(command.Id, Arg.Any<CancellationToken>()).Returns((SaleDocument?)null);
 
         // When
         var act = () => _handler.Handle(command, CancellationToken.None);

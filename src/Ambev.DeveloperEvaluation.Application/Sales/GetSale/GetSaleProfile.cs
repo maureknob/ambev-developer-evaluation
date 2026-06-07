@@ -1,5 +1,5 @@
 using AutoMapper;
-using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.ReadModel;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 
@@ -7,7 +7,7 @@ public class GetSaleProfile : Profile
 {
     public GetSaleProfile()
     {
-        CreateMap<Sale, GetSaleResult>();
-        CreateMap<SaleItem, GetSaleItemResult>();
+        CreateMap<SaleDocument, GetSaleResult>();
+        CreateMap<SaleItemDocument, GetSaleItemResult>();
     }
 }

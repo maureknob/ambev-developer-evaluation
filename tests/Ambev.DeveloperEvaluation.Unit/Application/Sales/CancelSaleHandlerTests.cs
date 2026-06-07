@@ -13,6 +13,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application.Sales;
 public class CancelSaleHandlerTests
 {
     private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly IMapper _mapper;
     private readonly ILogger<CancelSaleHandler> _logger;
     private readonly CancelSaleHandler _handler;
@@ -20,9 +21,10 @@ public class CancelSaleHandlerTests
     public CancelSaleHandlerTests()
     {
         _saleRepository = Substitute.For<ISaleRepository>();
+        _mongoRepo = Substitute.For<IMongoSaleRepository>();
         _mapper = Substitute.For<IMapper>();
         _logger = Substitute.For<ILogger<CancelSaleHandler>>();
-        _handler = new CancelSaleHandler(_saleRepository, _mapper, _logger);
+        _handler = new CancelSaleHandler(_saleRepository, _mongoRepo, _mapper, _logger);
     }
 
     [Fact(DisplayName = "A12 — Valid cancellation sets IsCancelled and logs SaleCancelledEvent")]

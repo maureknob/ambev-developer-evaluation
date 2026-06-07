@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ambev.DeveloperEvaluation.Domain.Events;
+using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CancelSaleItem;
@@ -9,12 +10,18 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CancelSaleItem;
 public class CancelSaleItemHandler : IRequestHandler<CancelSaleItemCommand, CancelSaleItemResult>
 {
     private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly IMapper _mapper;
     private readonly ILogger<CancelSaleItemHandler> _logger;
 
-    public CancelSaleItemHandler(ISaleRepository saleRepository, IMapper mapper, ILogger<CancelSaleItemHandler> logger)
+    public CancelSaleItemHandler(
+        ISaleRepository saleRepository,
+        IMongoSaleRepository mongoRepo,
+        IMapper mapper,
+        ILogger<CancelSaleItemHandler> logger)
     {
         _saleRepository = saleRepository;
+        _mongoRepo = mongoRepo;
         _mapper = mapper;
         _logger = logger;
     }
@@ -31,6 +38,8 @@ public class CancelSaleItemHandler : IRequestHandler<CancelSaleItemCommand, Canc
         sale.CancelItem(command.ItemId);
 
         var updated = await _saleRepository.UpdateAsync(sale, cancellationToken);
+
+        await _mongoRepo.UpsertAsync(_mapper.Map<SaleDocument>(updated), cancellationToken);
 
         _logger.LogInformation("ItemCancelledEvent: {@Event}", new ItemCancelledEvent
         {

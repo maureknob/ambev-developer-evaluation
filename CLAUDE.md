@@ -89,10 +89,10 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | SALE-6 — MongoDB Read Model |
-| **Last Completed Step** | **[SALE-5.4](.doc/steps/SALE-5.4.md)** — DI registration for Sales services |
-| **Next Step** | **[SALE-6.1](.doc/steps/SALE-6.1.md)** — `SaleDocument`, `SaleItemDocument`, `IMongoSaleRepository` |
-| **Tests Status** | Green — all A01–A21 handler targets implemented |
+| **Current Module** | SALE-7 — Redis Cache |
+| **Last Completed Step** | **[SALE-6.4](.doc/steps/SALE-6.4.md)** — DI registration for MongoDB |
+| **Next Step** | **[SALE-7.1](.doc/steps/SALE-7.1.md)** — `ISaleCacheService` and `RedisSaleCacheService` |
+| **Tests Status** | Green — all A01–A21 handler targets implemented (89/89) |
 
 ### Completed Steps
 - [x] SALE-1.1 — `Sale.cs` and `SaleItem.cs` (`feat(domain): add Sale and SaleItem entities`)
@@ -117,12 +117,12 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-5.2 — UpdateSale, DeleteSale, CancelSale, CancelSaleItem request/response models (`feat(api): add UpdateSale, DeleteSale, CancelSale, and CancelSaleItem request and response models`)
 - [x] SALE-5.3 — `SalesController` with all 7 endpoints (`feat(api): add SalesController`)
 - [x] SALE-5.4 — `ISaleRepository` registered in DI (`feat(ioc): register Sales services in DI container`)
+- [x] SALE-6.1 — `SaleDocument`, `SaleItemDocument`, `IMongoSaleRepository` (`feat(domain): add SaleDocument and IMongoSaleRepository for read-side`)
+- [x] SALE-6.2 — `MongoSaleRepository` implementation (`feat(nosql): add MongoSaleRepository implementation`)
+- [x] SALE-6.3 — Wire MongoDB into `GetSaleHandler`, `GetSalesHandler`, and write handlers (`feat(application): wire MongoDB read-side into GetSale and GetSales handlers`)
+- [x] SALE-6.4 — DI registration for MongoDB (`feat(ioc): register MongoDB client and MongoSaleRepository in DI`)
 
 ### Pending Steps
-- [ ] SALE-6.1 — `SaleDocument`, `SaleItemDocument`, `IMongoSaleRepository`
-- [ ] SALE-6.2 — `MongoSaleRepository` implementation
-- [ ] SALE-6.3 — Wire MongoDB into `GetSaleHandler`, `GetSalesHandler`, and write handlers
-- [ ] SALE-6.4 — DI registration for MongoDB
 - [ ] SALE-7.1 — `ISaleCacheService` and `RedisSaleCacheService`
 - [ ] SALE-7.2 — Wire Redis cache-aside into `GetSaleHandler` and write-side invalidation
 - [ ] SALE-7.3 — DI registration for Redis
@@ -136,6 +136,7 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-3 — Application Layer (all handlers implemented)
 - [x] SALE-4 — ORM & Persistence (all steps complete)
 - [x] SALE-5 — API Endpoints (all steps complete)
+- [x] SALE-6 — MongoDB Read Model (all steps complete)
 
 ### Pending Modules
 - [ ] SALE-6 — MongoDB Read Model

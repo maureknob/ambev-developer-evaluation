@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Events;
+using Ambev.DeveloperEvaluation.Domain.ReadModel;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
@@ -11,12 +12,18 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleResult>
 {
     private readonly ISaleRepository _saleRepository;
+    private readonly IMongoSaleRepository _mongoRepo;
     private readonly IMapper _mapper;
     private readonly ILogger<CreateSaleHandler> _logger;
 
-    public CreateSaleHandler(ISaleRepository saleRepository, IMapper mapper, ILogger<CreateSaleHandler> logger)
+    public CreateSaleHandler(
+        ISaleRepository saleRepository,
+        IMongoSaleRepository mongoRepo,
+        IMapper mapper,
+        ILogger<CreateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
+        _mongoRepo = mongoRepo;
         _mapper = mapper;
         _logger = logger;
     }
@@ -47,6 +54,8 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
             sale.AddItem(new SaleItem(item.ProductId, item.ProductName, item.Quantity, item.UnitPrice));
 
         var created = await _saleRepository.CreateAsync(sale, cancellationToken);
+
+        await _mongoRepo.UpsertAsync(_mapper.Map<SaleDocument>(created), cancellationToken);
 
         _logger.LogInformation("SaleCreatedEvent: {@Event}", new SaleCreatedEvent
         {
