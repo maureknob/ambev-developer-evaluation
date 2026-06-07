@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.WebApi.Common;
@@ -16,6 +17,7 @@ using Ambev.DeveloperEvaluation.Application.Sales.CancelSaleItem;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class SalesController : BaseController
