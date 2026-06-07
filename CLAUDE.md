@@ -90,8 +90,8 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 | Field | Value |
 |-------|-------|
 | **Current Module** | SALE-9 — Startup Migrations & Infrastructure Seeding |
-| **Last Completed Step** | **[SALE-8.2](.doc/steps/SALE-8.2.md)** — DI registration for Rebus (in-memory transport) |
-| **Next Step** | **[SALE-9.1](.doc/steps/SALE-9.1.md)** — `DatabaseMigrationService` |
+| **Last Completed Step** | **[SALE-9.1](.doc/steps/SALE-9.1.md)** — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check |
+| **Next Step** | — all steps complete — |
 | **Tests Status** | Green — all A01–A21 handler targets implemented (89/89) |
 
 ### Completed Steps
@@ -128,7 +128,7 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-7.3 — DI registration for Redis
 - [x] SALE-8.1 — Publish domain events via Rebus in all write handlers
 - [x] SALE-8.2 — DI registration for Rebus (in-memory transport)
-- [ ] SALE-9.1 — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check
+- [x] SALE-9.1 — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
@@ -141,5 +141,5 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 ### Pending Modules
 - [x] SALE-7 — Redis Cache
 - [x] SALE-8 — Rebus Domain Event Publishing
-- [ ] SALE-9 — Startup Migrations & Infrastructure Seeding
+- [x] SALE-9 — Startup Migrations & Infrastructure Seeding
 

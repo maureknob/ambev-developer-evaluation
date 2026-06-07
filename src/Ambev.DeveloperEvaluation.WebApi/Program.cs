@@ -5,6 +5,7 @@ using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.IoC;
 using Ambev.DeveloperEvaluation.ORM;
+using Ambev.DeveloperEvaluation.WebApi.Infrastructure;
 using Ambev.DeveloperEvaluation.WebApi.Middleware;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,33 @@ public class Program
             builder.Services.AddEndpointsApiExplorer();
 
             builder.AddBasicHealthChecks();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Enter your JWT token. Example: eyJhbGci..."
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             builder.Services.AddDbContext<DefaultContext>(options =>
                 options.UseNpgsql(
@@ -52,16 +79,13 @@ public class Program
 
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+            builder.Services.AddHostedService<DatabaseMigrationService>();
+
             var app = builder.Build();
             app.UseMiddleware<ValidationExceptionMiddleware>();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseAuthentication();
             app.UseAuthorization();
