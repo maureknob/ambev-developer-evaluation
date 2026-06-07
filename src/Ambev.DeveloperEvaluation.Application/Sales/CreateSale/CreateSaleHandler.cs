@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Rebus.Bus;
 using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Events;
@@ -15,6 +16,7 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
     private readonly ISaleCacheService _cache;
+    private readonly IBus _bus;
     private readonly IMapper _mapper;
     private readonly ILogger<CreateSaleHandler> _logger;
 
@@ -22,12 +24,14 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         ISaleRepository saleRepository,
         IMongoSaleRepository mongoRepo,
         ISaleCacheService cache,
+        IBus bus,
         IMapper mapper,
         ILogger<CreateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mongoRepo = mongoRepo;
         _cache = cache;
+        _bus = bus;
         _mapper = mapper;
         _logger = logger;
     }
@@ -71,14 +75,25 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
             _logger.LogWarning(ex, "Redis unavailable; could not populate cache for sale {SaleId}.", created.Id);
         }
 
-        _logger.LogInformation("SaleCreatedEvent: {@Event}", new SaleCreatedEvent
+        var domainEvent = new SaleCreatedEvent
         {
             SaleId = created.Id,
             SaleNumber = created.SaleNumber,
             CustomerId = created.CustomerId,
             TotalAmount = created.TotalAmount,
             OccurredAt = DateTime.UtcNow
-        });
+        };
+
+        _logger.LogInformation("SaleCreatedEvent: {@Event}", domainEvent);
+
+        try
+        {
+            await _bus.Publish(domainEvent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to publish SaleCreatedEvent for sale {SaleId}.", created.Id);
+        }
 
         return _mapper.Map<CreateSaleResult>(created);
     }

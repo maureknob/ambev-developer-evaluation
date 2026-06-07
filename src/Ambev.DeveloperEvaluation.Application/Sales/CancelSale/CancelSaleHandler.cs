@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Rebus.Bus;
 using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.ReadModel;
@@ -13,6 +14,7 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand, CancelSaleRe
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
     private readonly ISaleCacheService _cache;
+    private readonly IBus _bus;
     private readonly IMapper _mapper;
     private readonly ILogger<CancelSaleHandler> _logger;
 
@@ -20,12 +22,14 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand, CancelSaleRe
         ISaleRepository saleRepository,
         IMongoSaleRepository mongoRepo,
         ISaleCacheService cache,
+        IBus bus,
         IMapper mapper,
         ILogger<CancelSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mongoRepo = mongoRepo;
         _cache = cache;
+        _bus = bus;
         _mapper = mapper;
         _logger = logger;
     }
@@ -52,12 +56,23 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand, CancelSaleRe
             _logger.LogWarning(ex, "Redis unavailable; could not populate cache for sale {SaleId}.", updated.Id);
         }
 
-        _logger.LogInformation("SaleCancelledEvent: {@Event}", new SaleCancelledEvent
+        var domainEvent = new SaleCancelledEvent
         {
             SaleId = updated.Id,
             SaleNumber = updated.SaleNumber,
             OccurredAt = DateTime.UtcNow
-        });
+        };
+
+        _logger.LogInformation("SaleCancelledEvent: {@Event}", domainEvent);
+
+        try
+        {
+            await _bus.Publish(domainEvent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to publish SaleCancelledEvent for sale {SaleId}.", updated.Id);
+        }
 
         return _mapper.Map<CancelSaleResult>(updated);
     }

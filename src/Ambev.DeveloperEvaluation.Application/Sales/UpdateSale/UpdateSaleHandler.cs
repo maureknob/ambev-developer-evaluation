@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Rebus.Bus;
 using Ambev.DeveloperEvaluation.Application.Sales.Common;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Events;
@@ -15,6 +16,7 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
     private readonly ISaleCacheService _cache;
+    private readonly IBus _bus;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateSaleHandler> _logger;
 
@@ -22,12 +24,14 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
         ISaleRepository saleRepository,
         IMongoSaleRepository mongoRepo,
         ISaleCacheService cache,
+        IBus bus,
         IMapper mapper,
         ILogger<UpdateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mongoRepo = mongoRepo;
         _cache = cache;
+        _bus = bus;
         _mapper = mapper;
         _logger = logger;
     }
@@ -79,14 +83,25 @@ public class UpdateSaleHandler : IRequestHandler<UpdateSaleCommand, UpdateSaleRe
             _logger.LogWarning(ex, "Redis unavailable; could not populate cache for sale {SaleId}.", updated.Id);
         }
 
-        _logger.LogInformation("SaleModifiedEvent: {@Event}", new SaleModifiedEvent
+        var domainEvent = new SaleModifiedEvent
         {
             SaleId = updated.Id,
             SaleNumber = updated.SaleNumber,
             PreviousTotalAmount = previousTotal,
             NewTotalAmount = updated.TotalAmount,
             OccurredAt = DateTime.UtcNow
-        });
+        };
+
+        _logger.LogInformation("SaleModifiedEvent: {@Event}", domainEvent);
+
+        try
+        {
+            await _bus.Publish(domainEvent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to publish SaleModifiedEvent for sale {SaleId}.", updated.Id);
+        }
 
         return _mapper.Map<UpdateSaleResult>(updated);
     }

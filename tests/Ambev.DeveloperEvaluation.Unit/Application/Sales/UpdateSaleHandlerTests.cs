@@ -7,6 +7,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Rebus.Bus;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.Sales;
@@ -16,6 +17,7 @@ public class UpdateSaleHandlerTests
     private readonly ISaleRepository _saleRepository;
     private readonly IMongoSaleRepository _mongoRepo;
     private readonly ISaleCacheService _cache;
+    private readonly IBus _bus;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateSaleHandler> _logger;
     private readonly UpdateSaleHandler _handler;
@@ -25,9 +27,10 @@ public class UpdateSaleHandlerTests
         _saleRepository = Substitute.For<ISaleRepository>();
         _mongoRepo = Substitute.For<IMongoSaleRepository>();
         _cache = Substitute.For<ISaleCacheService>();
+        _bus = Substitute.For<IBus>();
         _mapper = Substitute.For<IMapper>();
         _logger = Substitute.For<ILogger<UpdateSaleHandler>>();
-        _handler = new UpdateSaleHandler(_saleRepository, _mongoRepo, _cache, _mapper, _logger);
+        _handler = new UpdateSaleHandler(_saleRepository, _mongoRepo, _cache, _bus, _mapper, _logger);
     }
 
     [Fact(DisplayName = "A06 — Valid update returns UpdateSaleResult")]
