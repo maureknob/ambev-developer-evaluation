@@ -89,10 +89,9 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | SALE-7 — Redis Cache |
-| **Current Module** | SALE-8 — Rebus Domain Event Publishing |
-| **Last Completed Step** | **[SALE-7.3](.doc/steps/SALE-7.3.md)** — DI registration for Redis |
-| **Next Step** | **[SALE-8.1](.doc/steps/SALE-8.1.md)** — Publish domain events via Rebus in all write handlers |
+| **Current Module** | SALE-9 — Startup Migrations & Infrastructure Seeding |
+| **Last Completed Step** | **[SALE-8.2](.doc/steps/SALE-8.2.md)** — DI registration for Rebus (in-memory transport) |
+| **Next Step** | **[SALE-9.1](.doc/steps/SALE-9.1.md)** — `DatabaseMigrationService` |
 | **Tests Status** | Green — all A01–A21 handler targets implemented (89/89) |
 
 ### Completed Steps
@@ -127,8 +126,8 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-7.1 — `ISaleCacheService` and `RedisSaleCacheService`
 - [x] SALE-7.2 — Wire Redis cache-aside into `GetSaleHandler` and write-side invalidation
 - [x] SALE-7.3 — DI registration for Redis
-- [ ] SALE-8.1 — Publish domain events via Rebus in all write handlers
-- [ ] SALE-8.2 — DI registration for Rebus (in-memory transport)
+- [x] SALE-8.1 — Publish domain events via Rebus in all write handlers
+- [x] SALE-8.2 — DI registration for Rebus (in-memory transport)
 - [ ] SALE-9.1 — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check
 
 ### Completed Modules
@@ -140,8 +139,7 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-6 — MongoDB Read Model (all steps complete)
 
 ### Pending Modules
-- [ ] SALE-6 — MongoDB Read Model
 - [x] SALE-7 — Redis Cache
-- [ ] SALE-8 — Rebus Domain Event Publishing
+- [x] SALE-8 — Rebus Domain Event Publishing
 - [ ] SALE-9 — Startup Migrations & Infrastructure Seeding
 

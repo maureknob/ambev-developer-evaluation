@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.Common;
+using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using Rebus.Config;
+using Rebus.Transport.InMem;
 
 namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers;
 
@@ -32,5 +35,12 @@ public class InfrastructureModuleInitializer : IModuleInitializer
         });
 
         builder.Services.AddScoped<ISaleCacheService, RedisSaleCacheService>();
+
+        builder.Services.AddRebus(configure => configure
+            .Transport(t => t.UseInMemoryTransport(new InMemNetwork(), "sales-events"))
+            .Logging(l => l.None())
+        );
+
+        builder.Services.AutoRegisterHandlersFromAssemblyOf<CreateSaleHandler>();
     }
 }
