@@ -16,15 +16,15 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.Property(s => s.SaleNumber).IsRequired().HasMaxLength(50);
         builder.HasIndex(s => s.SaleNumber).IsUnique();
 
-        builder.Property(s => s.SaleDate).IsRequired().HasColumnType("timestamp");
+        builder.Property(s => s.SaleDate).IsRequired().HasColumnType("timestamp with time zone");
         builder.Property(s => s.CustomerId).IsRequired().HasColumnType("uuid");
         builder.Property(s => s.CustomerName).IsRequired().HasMaxLength(100);
         builder.Property(s => s.BranchId).IsRequired().HasColumnType("uuid");
         builder.Property(s => s.BranchName).IsRequired().HasMaxLength(100);
         builder.Property(s => s.TotalAmount).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(s => s.IsCancelled).IsRequired().HasDefaultValue(false);
-        builder.Property(s => s.CreatedAt).IsRequired().HasColumnType("timestamp");
-        builder.Property(s => s.UpdatedAt).HasColumnType("timestamp");
+        builder.Property(s => s.CreatedAt).IsRequired().HasColumnType("timestamp with time zone");
+        builder.Property(s => s.UpdatedAt).HasColumnType("timestamp with time zone");
 
         builder.HasMany(s => s.Items)
             .WithOne()
