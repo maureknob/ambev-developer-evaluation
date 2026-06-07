@@ -32,17 +32,29 @@ public class DatabaseMigrationService : IHostedService
 
     private async Task ApplyPostgresAsync(IServiceScope scope, CancellationToken ct)
     {
-        try
+        const int maxRetries = 10;
+        const int delaySeconds = 5;
+
+        for (int attempt = 1; attempt <= maxRetries; attempt++)
         {
-            var db = scope.ServiceProvider.GetRequiredService<DefaultContext>();
-            _logger.LogInformation("Applying EF Core migrations...");
-            await db.Database.MigrateAsync(ct);
-            _logger.LogInformation("EF Core migrations applied.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to apply EF Core migrations.");
-            throw;
+            try
+            {
+                var db = scope.ServiceProvider.GetRequiredService<DefaultContext>();
+                _logger.LogInformation("Applying EF Core migrations (attempt {Attempt}/{Max})...", attempt, maxRetries);
+                await db.Database.MigrateAsync(ct);
+                _logger.LogInformation("EF Core migrations applied.");
+                return;
+            }
+            catch (Exception ex) when (attempt < maxRetries)
+            {
+                _logger.LogWarning(ex, "Migration attempt {Attempt} failed — retrying in {Delay}s...", attempt, delaySeconds);
+                await Task.Delay(TimeSpan.FromSeconds(delaySeconds), ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to apply EF Core migrations after {Max} attempts.", maxRetries);
+                throw;
+            }
         }
     }
 
