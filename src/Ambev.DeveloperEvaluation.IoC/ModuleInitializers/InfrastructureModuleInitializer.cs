@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.Common;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -23,5 +24,13 @@ public class InfrastructureModuleInitializer : IModuleInitializer
         builder.Services.AddScoped<IMongoDatabase>(sp =>
             sp.GetRequiredService<IMongoClient>().GetDatabase(mongoDatabaseName));
         builder.Services.AddScoped<IMongoSaleRepository, MongoSaleRepository>();
+
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration["Redis:ConnectionString"];
+            options.InstanceName = "ambev_";
+        });
+
+        builder.Services.AddScoped<ISaleCacheService, RedisSaleCacheService>();
     }
 }
