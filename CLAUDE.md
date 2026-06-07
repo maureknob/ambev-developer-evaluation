@@ -89,9 +89,9 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 
 | Field | Value |
 |-------|-------|
-| **Current Module** | SALE-5 — API Endpoints |
+| **Current Module** | SALE-6 — MongoDB Read Model |
 | **Last Completed Step** | **[SALE-5.4](.doc/steps/SALE-5.4.md)** — DI registration for Sales services |
-| **Next Step** | Final PR: `feature/SALE-5-api-endpoints` → `dev`, then `dev` → `main` (v1.0.0) |
+| **Next Step** | **[SALE-6.1](.doc/steps/SALE-6.1.md)** — `SaleDocument`, `SaleItemDocument`, `IMongoSaleRepository` |
 | **Tests Status** | Green — all A01–A21 handler targets implemented |
 
 ### Completed Steps
@@ -109,8 +109,6 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-3.3 — UpdateSale command and handler (`feat(application): add UpdateSale command and handler`)
 - [x] SALE-3.4 — DeleteSale command and handler (`feat(application): add DeleteSale command and handler`)
 - [x] SALE-3.5 — CancelSale and CancelSaleItem commands and handlers (`feat(application): add CancelSale and CancelSaleItem commands and handlers`)
-
-### Completed Steps (continued)
 - [x] SALE-4.1 — `SaleConfiguration` EF Core mapping (`feat(orm): add EF Core mapping for Sale and SaleItem`)
 - [x] SALE-4.2 — `SaleRepository` implementation (`feat(orm): add SaleRepository`)
 - [x] SALE-4.3 — `DbSet<Sale>` registered in `DefaultContext` (`chore(orm): register Sale DbSet and configuration in DefaultContext`)
@@ -120,10 +118,28 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-5.3 — `SalesController` with all 7 endpoints (`feat(api): add SalesController`)
 - [x] SALE-5.4 — `ISaleRepository` registered in DI (`feat(ioc): register Sales services in DI container`)
 
+### Pending Steps
+- [ ] SALE-6.1 — `SaleDocument`, `SaleItemDocument`, `IMongoSaleRepository`
+- [ ] SALE-6.2 — `MongoSaleRepository` implementation
+- [ ] SALE-6.3 — Wire MongoDB into `GetSaleHandler`, `GetSalesHandler`, and write handlers
+- [ ] SALE-6.4 — DI registration for MongoDB
+- [ ] SALE-7.1 — `ISaleCacheService` and `RedisSaleCacheService`
+- [ ] SALE-7.2 — Wire Redis cache-aside into `GetSaleHandler` and write-side invalidation
+- [ ] SALE-7.3 — DI registration for Redis
+- [ ] SALE-8.1 — Publish domain events via Rebus in all write handlers
+- [ ] SALE-8.2 — DI registration for Rebus (in-memory transport)
+- [ ] SALE-9.1 — `DatabaseMigrationService` — auto EF Core migrations, MongoDB indexes, Redis check
+
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
 - [x] SALE-2 — Unit Tests
 - [x] SALE-3 — Application Layer (all handlers implemented)
 - [x] SALE-4 — ORM & Persistence (all steps complete)
 - [x] SALE-5 — API Endpoints (all steps complete)
+
+### Pending Modules
+- [ ] SALE-6 — MongoDB Read Model
+- [ ] SALE-7 — Redis Cache
+- [ ] SALE-8 — Rebus Domain Event Publishing
+- [ ] SALE-9 — Startup Migrations & Infrastructure Seeding
 
