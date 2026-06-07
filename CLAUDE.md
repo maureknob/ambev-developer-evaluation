@@ -90,8 +90,8 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 | Field | Value |
 |-------|-------|
 | **Current Module** | SALE-5 — API Endpoints |
-| **Last Completed Step** | **[SALE-5.3](.doc/steps/SALE-5.3.md)** — `SalesController` with all 7 endpoints |
-| **Next Step** | **[SALE-5.4](.doc/steps/SALE-5.4.md)** — DI registration for Sales services |
+| **Last Completed Step** | **[SALE-5.4](.doc/steps/SALE-5.4.md)** — DI registration for Sales services |
+| **Next Step** | Final PR: `feature/SALE-5-api-endpoints` → `dev`, then `dev` → `main` (v1.0.0) |
 | **Tests Status** | Green — all A01–A21 handler targets implemented |
 
 ### Completed Steps
@@ -118,11 +118,12 @@ The spec at `.doc/sales-domain-spec.md` is the single source of truth — all co
 - [x] SALE-5.1 — CreateSale, GetSale, GetSales request/response models and profiles (`feat(api): add CreateSale, GetSale, and GetSales request and response models`)
 - [x] SALE-5.2 — UpdateSale, DeleteSale, CancelSale, CancelSaleItem request/response models (`feat(api): add UpdateSale, DeleteSale, CancelSale, and CancelSaleItem request and response models`)
 - [x] SALE-5.3 — `SalesController` with all 7 endpoints (`feat(api): add SalesController`)
+- [x] SALE-5.4 — `ISaleRepository` registered in DI (`feat(ioc): register Sales services in DI container`)
 
 ### Completed Modules
 - [x] SALE-1 — Domain Entities, Repository Interface, Validator, Events
 - [x] SALE-2 — Unit Tests
 - [x] SALE-3 — Application Layer (all handlers implemented)
 - [x] SALE-4 — ORM & Persistence (all steps complete)
-- [ ] SALE-5 — API Endpoints (in progress)
+- [x] SALE-5 — API Endpoints (all steps complete)
 
