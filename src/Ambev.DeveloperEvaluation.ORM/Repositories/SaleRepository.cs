@@ -1,6 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
@@ -36,6 +37,13 @@ public class SaleRepository : ISaleRepository
 
     public async Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken = default)
     {
+        foreach (var entry in _context.ChangeTracker.Entries().ToList())
+            entry.State = EntityState.Detached;
+
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM \"SaleItems\" WHERE \"SaleId\" = {0}", sale.Id);
+
+        _context.Set<SaleItem>().AddRange(sale.Items);
         _context.Set<Sale>().Update(sale);
         await _context.SaveChangesAsync(cancellationToken);
         return sale;
